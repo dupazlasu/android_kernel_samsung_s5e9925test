@@ -26,6 +26,12 @@ dtbo-$(CONFIG_MODEL_B0S) += samsung/b0s/b0s_eur_openx_w01_r26.dtbo
 dtbo-$(CONFIG_MODEL_B0S) += samsung/b0s/b0s_eur_openx_w01_r27.dtbo
 dtbo-$(CONFIG_MODEL_B0S) += samsung/b0s/b0s_eur_openx_w01_r28.dtbo
 
+dtbo-$(CONFIG_MODEL_R11S) += samsung/r11s/r11s_eur_openx_w01_r00.dtbo
+dtbo-$(CONFIG_MODEL_R11S) += samsung/r11s/r11s_eur_openx_w01_r01.dtbo
+dtbo-$(CONFIG_MODEL_R11S) += samsung/r11s/r11s_eur_openx_w01_r02.dtbo
+dtbo-$(CONFIG_MODEL_R11S) += samsung/r11s/r11s_eur_openx_w01_r03.dtbo
+dtbo-$(CONFIG_MODEL_R11S) += samsung/r11s/r11s_eur_openx_w01_r05.dtbo
+
 targets += dtbs
 DTB_LIST  := $(dtb-y) $(dtbo-y)
 always    := $(DTB_LIST)

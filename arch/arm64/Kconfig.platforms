@@ -123,6 +123,11 @@ config MODEL_B0S
 	default n
 	depends on ARCH_EXYNOS
 
+config MODEL_R11S
+	bool "Samsung Galaxy S23 FE 5G"
+	default n
+	depends on ARCH_EXYNOS
+
 config ARCH_SPARX5
 	bool "ARMv8 based Microchip Sparx5 SoC family"
 	select PINCTRL
