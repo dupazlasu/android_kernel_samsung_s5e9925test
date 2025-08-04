@@ -31,10 +31,6 @@ while [[ $# -gt 0 ]]; do
             KSU_OPTION="$2"
             shift 2
             ;;
-        --debug|-d)
-            DEBUG_OPTION="$2"
-            shift 2
-            ;;
         --recovery|-r)
             RECOVERY_OPTION="$2"
             shift 2
@@ -90,10 +86,6 @@ if [[ "$KSU_OPTION" == "y" ]]; then
     KSU=ksu.config
 fi
 
-if [[ "$DEBUG_OPTION" == "y" ]]; then
-    DEBUG=debug.config
-fi
-
 rm -rf build/out/$MODEL
 mkdir -p build/out/$MODEL/zip/files
 mkdir -p build/out/$MODEL/zip/META-INF/com/google/android
@@ -115,17 +107,11 @@ build_kernel() {
         echo "Recovery: Y"
     fi
 
-    if [ -z "$DEBUG" ]; then
-        echo "DEBUG: No"
-    else
-        echo "DEBUG: Yes"
-    fi
-
     echo "-----------------------------------------------"
     echo "Building kernel using "$KERNEL_DEFCONFIG""
     echo "Generating configuration file..."
     echo "-----------------------------------------------"
-    make ${MAKE_ARGS} -j$CORES s5e9925_defconfig $MODEL.config  $RECOVERY $KSU $DEBUG || abort
+    make ${MAKE_ARGS} -j$CORES s5e9925_defconfig $MODEL.config  $RECOVERY $KSU || abort
 
     echo "Building kernel..."
     echo "-----------------------------------------------"
