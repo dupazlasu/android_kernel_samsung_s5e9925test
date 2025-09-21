@@ -485,6 +485,8 @@ static int usbtmc488_ioctl_read_stb(struct usbtmc_file_data *file_data,
 	u8 tag;
 	__u8 stb;
 	int rv;
+	long wait_rv;
+	unsigned long expire;
 
 	dev_dbg(dev, "Enter ioctl_read_stb iin_ep_present: %d\n",
 		data->iin_ep_present);
@@ -527,12 +529,14 @@ static int usbtmc488_ioctl_read_stb(struct usbtmc_file_data *file_data,
 	}
 
 	if (data->iin_ep_present) {
-		rv = wait_event_interruptible_timeout(
+		expire = msecs_to_jiffies(file_data->timeout);
+		wait_rv = wait_event_interruptible_timeout(
 			data->waitq,
 			atomic_read(&data->iin_data_valid) != 0,
-			file_data->timeout);
-		if (rv < 0) {
-			dev_dbg(dev, "wait interrupted %d\n", rv);
+			expire);
+		if (wait_rv < 0) {
+			dev_dbg(dev, "wait interrupted %ld\n", wait_rv);
+			rv = wait_rv;
 			goto exit;
 		}
 

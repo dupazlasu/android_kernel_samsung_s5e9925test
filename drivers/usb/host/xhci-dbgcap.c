@@ -638,6 +638,10 @@ static void xhci_dbc_stop(struct xhci_dbc *dbc)
 		return;
 	case DS_CONFIGURED:
 	case DS_STALLED:
+		spin_lock(&dbc->lock);
+		xhci_dbc_flush_requests(dbc);
+		spin_unlock(&dbc->lock);
+
 		if (dbc->driver->disconnect)
 			dbc->driver->disconnect(dbc);
 		break;
