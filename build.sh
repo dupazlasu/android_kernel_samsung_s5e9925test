@@ -215,7 +215,7 @@ build_modules() {
     "
     for FILENAME in $FILENAMES; do
         FILE=$(find out/$MODULES_FOLDER -type f -name "$FILENAME")
-        cp "$FILE" "build/out/$MODEL/modules_dlkm"
+        cp "$FILE" "build/out/$MODEL/modules_dlkm" 2>/dev/null
         rm -f "$FILE"
     done
 
