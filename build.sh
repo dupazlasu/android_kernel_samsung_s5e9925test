@@ -171,7 +171,7 @@ build_boot() {
     KERNEL=build/out/$MODEL/Image
     HEADER_VERSION=4
     OS_VERSION=16.0.0
-    OS_PATCH_LEVEL=2025-09
+    OS_PATCH_LEVEL=2025-11
     CMDLINE=""
 
 	python3 toolchain/mkbootimg/mkbootimg.py --header_version $HEADER_VERSION --cmdline "$CMDLINE" --ramdisk $RAMDISK_00 \
