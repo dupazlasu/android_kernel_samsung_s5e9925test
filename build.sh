@@ -171,7 +171,7 @@ build_boot() {
     KERNEL=build/out/$MODEL/Image
     HEADER_VERSION=4
     OS_VERSION=16.0.0
-    OS_PATCH_LEVEL=2025-11
+    OS_PATCH_LEVEL=2025-12
     CMDLINE=""
 
 	python3 toolchain/mkbootimg/mkbootimg.py --header_version $HEADER_VERSION --cmdline "$CMDLINE" --ramdisk $RAMDISK_00 \
@@ -345,11 +345,12 @@ build_zip() {
     version=${version:1}
     pushd build/out/$MODEL/zip > /dev/null
     DATE=`date +"%d-%m-%Y_%H-%M-%S"`
+    COMMIT=`git rev-parse --short HEAD`
 
     if [[ "$KSU_OPTION" == "y" ]]; then
-        NAME="$version"_"$MODEL"_UNOFFICIAL_KSU_"$DATE".zip
+        NAME="$version"_"$MODEL"_"$COMMIT"_KSU_"$DATE".zip
     else
-        NAME="$version"_"$MODEL"_UNOFFICIAL_"$DATE".zip
+        NAME="$version"_"$MODEL"_"$COMMIT"_"$DATE".zip
     fi
     zip -r -qq ../"$NAME" .
     popd > /dev/null
