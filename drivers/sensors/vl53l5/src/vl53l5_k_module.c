@@ -2049,9 +2049,7 @@ int vl53l5_k_spi_probe(struct spi_device *spi)
 	p_module->dump_nb.priority = 1;
 
 	{
-		int ret;
-		ret = sensordump_notifier_register(&p_module->dump_nb);
-		vl53l5_k_log_info("notifier %d", ret);
+		vl53l5_k_log_info("notifier %d", ret, sensordump_notifier_register(&p_module->dump_nb));
 	}
 	//----- for sec dump
 #endif

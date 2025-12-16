@@ -67,8 +67,6 @@ void qdf_flex_mem_deinit(struct qdf_flex_mem_pool *pool)
 			continue;
 
 		qdf_list_remove_node(&pool->seg_list, &seg->node);
-		if (seg->dynamic)
-			qdf_tfree(seg);
 	}
 }
 qdf_export_symbol(qdf_flex_mem_deinit);
@@ -129,7 +127,6 @@ static void qdf_flex_mem_seg_free(struct qdf_flex_mem_pool *pool,
 		return;
 
 	qdf_list_remove_node(&pool->seg_list, &seg->node);
-	qdf_tfree(seg);
 }
 
 static void __qdf_flex_mem_free(struct qdf_flex_mem_pool *pool, void *ptr)

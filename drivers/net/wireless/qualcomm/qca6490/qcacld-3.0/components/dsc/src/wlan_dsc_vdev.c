@@ -95,7 +95,6 @@ static void __dsc_vdev_destroy(struct dsc_vdev **out_vdev)
 	__dsc_trans_deinit(&vdev->trans);
 	vdev->psoc = NULL;
 
-	qdf_tfree(vdev);
 }
 
 void dsc_vdev_destroy(struct dsc_vdev **out_vdev)

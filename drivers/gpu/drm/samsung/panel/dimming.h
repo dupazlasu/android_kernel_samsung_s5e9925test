@@ -246,16 +246,16 @@ typedef struct timespec mytime_t;
 #define difftime(t1, t2)	((BILLION * ((t2).tv_sec - (t1).tv_sec) + (t2).tv_nsec - (t1).tv_nsec) / 1000)
 #endif
 #endif	/* __KERNEL__ */
-#endif	/* DEBUG_EXCUTION_TIME */
-
-#define in_range(i, r)					\
+#define internal_in_range(i, r)					\
 	((r).from <= (r).to) ?				\
 	((r).from <= (i) && (i) < (r).to) :	\
 	((r).from >= (i) && (i) > (r).to)
 
+	#endif	/* DEBUG_EXCUTION_TIME */
+
 #define for_each_range(i, r)	\
 for ((i) = (r).from;		\
-	(i) != (r).to && in_range(i, r);			\
+	(i) != (r).to && internal_in_range(i, r);			\
 	(i) += (r).step)
 
 #define for_each_tp(__pos__)	\

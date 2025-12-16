@@ -100,7 +100,6 @@ static void __dsc_psoc_destroy(struct dsc_psoc **out_psoc)
 	qdf_list_destroy(&psoc->vdevs);
 	psoc->driver = NULL;
 
-	qdf_tfree(psoc);
 }
 
 void dsc_psoc_destroy(struct dsc_psoc **out_psoc)
