@@ -7870,7 +7870,6 @@ CONFIG_INTEGRITY_AUDIT=y
 CONFIG_DEFAULT_SECURITY_SELINUX=y
 # CONFIG_DEFAULT_SECURITY_DAC is not set
 CONFIG_LSM="lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
-CONFIG_KZT=y
 
 #
 # Kernel hardening options
