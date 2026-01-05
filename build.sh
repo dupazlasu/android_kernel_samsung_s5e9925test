@@ -46,6 +46,17 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+fetch_ksu() {
+
+    rm -rf "$PWD/KernelSU-Next"
+
+        echo "Fetching latest KernelSU Next"
+        git submodule update --init --recursive || {
+            echo "Failed to initialize KSU Next submodule!"
+            exit 1
+        }
+}
+
 echo "Preparing the build environment..."
 
 pushd $(dirname "$0") > /dev/null
@@ -355,6 +366,9 @@ build_zip() {
     zip -r -qq ../"$NAME" .
     popd > /dev/null
 }
+if [[ "$KSU_OPTION" == "y" ]]; then
+    fetch_ksu
+fi
 
 build_kernel
 build_boot
