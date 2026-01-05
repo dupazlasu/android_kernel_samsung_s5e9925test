@@ -47,7 +47,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.artifact_name.outputs.name }}
-          path: build/out/${{ matrix.target }}/zip
+          path: build/out/${{ matrix.target }}/*.zip
 
   release:
     needs: build
