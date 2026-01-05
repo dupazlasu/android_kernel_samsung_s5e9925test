@@ -1,33 +1,72 @@
-name: Build ExtremeKernel KSU
-
-on: [workflow_dispatch, push]
+name: Build ExtremeKernel
+on: 
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag'
+        required: false
+        type: string
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
         target: [r0s, g0s, b0s]
-
+        variant: [y, n]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
         with:
           submodules: 'recursive'
-
+          
       - name: Set up the environment
         run: |
           sudo apt-get update
           sudo apt-get install -y git-core gnupg flex bison build-essential zip curl zlib1g-dev libc6-dev-i386 x11proto-core-dev \
           libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig
+          
       - name: Build kernel
         run: |
-          ./build.sh -m ${{ matrix.target }} -k y -r n -p n
-
+          ./build.sh -m ${{ matrix.target }} -k ${{ matrix.variant }} -r n -p n
+          
+      - name: Set artifact name
+        id: artifact_name
+        run: |
+          if [ "${{ matrix.variant }}" = "y" ]; then
+            echo "name=ExtremeKRNL-2200-${{ matrix.target }}-KSU" >> $GITHUB_OUTPUT
+          else
+            echo "name=ExtremeKRNL-2200-${{ matrix.target }}" >> $GITHUB_OUTPUT
+          fi
+          
       - name: Upload Kernel Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: "ExtremeKRNL-2200-${{ matrix.target }}"
+          name: ${{ steps.artifact_name.outputs.name }}
           path: build/out/${{ matrix.target }}/zip
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != ''
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.release_tag }}
+          files: artifacts/**/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
