@@ -33,16 +33,7 @@ jobs:
       - name: Build kernel
         run: |
           ./build.sh -m ${{ matrix.target }} -k ${{ matrix.variant }} -r n -p n
-          
-      - name: Set artifact name
-        id: artifact_name
-        run: |
-          if [ "${{ matrix.variant }}" = "y" ]; then
-            echo "name=ExtremeKRNL-2200-${{ matrix.target }}-KSU" >> $GITHUB_OUTPUT
-          else
-            echo "name=ExtremeKRNL-2200-${{ matrix.target }}" >> $GITHUB_OUTPUT
-          fi
-          
+
       - name: Upload Kernel Artifacts
         uses: actions/upload-artifact@v4
         with:
