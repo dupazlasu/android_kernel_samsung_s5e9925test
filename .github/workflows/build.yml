@@ -37,7 +37,6 @@ jobs:
       - name: Upload Kernel Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.artifact_name.outputs.name }}
           path: build/out/${{ matrix.target }}/*.zip
 
   release:
