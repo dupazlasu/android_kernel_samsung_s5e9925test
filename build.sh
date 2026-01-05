@@ -359,9 +359,9 @@ build_zip() {
     COMMIT=`git rev-parse --short HEAD`
 
     if [[ "$KSU_OPTION" == "y" ]]; then
-        NAME="$version"_"$MODEL"_"$COMMIT"_KSU_"$DATE".zip
+        NAME="$version"_"$MODEL"_"$COMMIT"_KSUN_"$DATE".zip
     else
-        NAME="$version"_"$MODEL"_"$COMMIT"_"$DATE".zip
+        NAME="$version"_"$MODEL"_"$COMMIT"_VANILLA_"$DATE".zip
     fi
     zip -r -qq ../"$NAME" .
     popd > /dev/null
