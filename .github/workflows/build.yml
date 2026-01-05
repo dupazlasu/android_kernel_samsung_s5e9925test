@@ -4,7 +4,7 @@ on:
     inputs:
       release_tag:
         description: 'Release tag'
-        required: false
+        required: true
         type: string
   push:
     branches:
@@ -52,7 +52,7 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != ''
+    if: github.event_name == 'workflow_dispatch'
     permissions:
       contents: write
     steps:
