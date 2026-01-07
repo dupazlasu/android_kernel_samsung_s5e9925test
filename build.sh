@@ -193,32 +193,12 @@ build_dtb() {
 build_modules() {
     MODULES_FOLDER=modules
     rm -rf out/$MODULES_FOLDER
-    mkdir build/out/$MODEL/modules_dlkm
 
     echo "-----------------------------------------------"
     echo "Building modules..."
     # Strip modules and place them in modules folder
     make ${MAKE_ARGS} INSTALL_MOD_PATH=$MODULES_FOLDER INSTALL_MOD_STRIP=1 modules_install || abort
-
-    # List of kernel modules to remove
-    # Some of the kernel modules are in /vendor_dlkm or /vendor/lib/modules and not in vendor_boot
-    # So we will remove them from the folder and run depmod again to update the files
-    # TODO: Generate a /vendor_dlkm partition as well
-    # The filenames were fetched from vendor_module_list_s5e9925.cfg and vendor_module_list_s5e9925_b0s.cfg.
-    FILENAMES="
-    sec_debug_coredump.ko
-    fingerprint.ko
-    fingerprint_sysfs.ko
-    input_booster_lkm.ko
-    dhd.ko
-    wlan.ko
-    "
-    for FILENAME in $FILENAMES; do
-        FILE=$(find out/$MODULES_FOLDER -type f -name "$FILENAME")
-        cp "$FILE" "build/out/$MODEL/modules_dlkm" 2>/dev/null
-        rm -f "$FILE"
-    done
-
+    
     # Now we run depmod to update the dep/softdep files
     # For this we need the kernel version
     KERNEL_DIR_PATH=$(find "out/$MODULES_FOLDER/lib/modules" -maxdepth 1 -type d -name "5.10*") || abort
@@ -285,8 +265,14 @@ build_modules() {
 
     find $KERNEL_DIR_PATH -name '*.ko' -exec cp '{}' build/out/$MODEL/modules/lib/modules ';'
 
+    if [ "$MODEL" == r0s ]; then 
+        sed -i /wlan\.ko/d "$KERNEL_DIR_PATH/modules.load"
+        echo "wlan.ko" >> "$KERNEL_DIR_PATH/modules.load"
+    fi
+
     # We also copy the module configuration descriptors
     cp $KERNEL_DIR_PATH/modules.{alias,dep,softdep,load} build/out/$MODEL/modules/lib/modules
+
 }
 
 build_vendor_boot() {
